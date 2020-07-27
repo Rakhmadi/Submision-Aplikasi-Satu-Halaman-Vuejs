@@ -1,0 +1,161 @@
+<!---->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sumbision Vue js</title>  
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <style>
+   .grd{
+    background-color: #89d4cf;
+    background-image: linear-gradient(315deg, #89d4cf 0%, #6e45e1 74%);
+   }
+   .wh{
+     color: white;
+   }
+   .v-list {
+  height: 400px;
+  overflow-y: auto;
+}
+  
+  </style>
+</head>
+<body>
+  <div id="app">
+    <v-app >
+      <v-main class="grd">
+        <v-container class="fill-height" fluid >
+          <v-row align="center" justify="center"> 
+            <v-col cols="12"md="6">
+              <h1 class="wh" v-text='text'></h1>
+              <v-text-field
+                  v-model='kataKunci'
+                  :elevation="13"
+                  :append-icon="sh ? 'mdi-magnify': 'mdi-magnify'"
+                  label="Search Video"
+                  id="id"
+                  solo
+                  rounded
+                  clearable
+              ></v-text-field>
+              <v-card v-show="hu" :loading="loading" transition="slide-y-reverse-transition">
+                  <v-toolbar color="white" light>
+                    <v-btn color="primary" @click="navigasi('first')" :disabled="!paginate['first']" icon title="First" >
+                      <v-icon>mdi-page-first</v-icon>
+                    </v-btn> 
+                    <v-btn color="primary" @click="navigasi('prev')" :disabled="!paginate['prev']" icon title="Pref">
+                      <v-icon>mdi-chevron-left</v-icon>
+                    </v-btn> 
+                    <v-btn color="primary" @click="navigasi('next')" :disabled="!paginate['next']" icon title="Next">
+                      <v-icon>mdi-chevron-right</v-icon>
+                    </v-btn> 
+                    <v-btn color="primary" @click="navigasi('last')" :disabled="!paginate['last']" icon title="Last">
+                      <v-icon>mdi-page-last</v-icon>
+                    </v-btn>
+                    <v-toolbar-title>Page {{paginate.page}} of {{paginate.total}}</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-btn color="primary"@click="clear()" icon>
+                      <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+                  </v-toolbar>
+                  <v-list>
+                    <v-list-item v-for="(data, index) in daftarHasil"  link :href="`${uri}&t=${data.start}s`" target="_blank">
+                      <v-list-item-content>
+                        <v-list-item-title class="title"><span v-html="data.text"></span></v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-main>
+    </v-app>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script src="pDeBounc.js"></script>
+  <script>
+    {{}}
+    new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+      data() {
+        return {
+          loading:false,
+          sh:true,
+          hu:false,
+          text:'Search Video',
+          uri: 'https://www.youtube.com/watch?v=klnvttPfOUM',
+          kataKunci: '',
+          daftarHasil: [],
+          paginate: {
+            first: null,
+            last: null,
+            prev: null,
+            next: null,
+            total: 0,
+            page: null
+          }
+        }
+      },
+      watch: {
+        kataKunci:pDebounce(async function tangani(kataKunci){
+          if (kataKunci && kataKunci.length >=1) {
+              await this.caridata(kataKunci, this.uri)
+            } else {
+              this.clear()
+              this.hu=false
+            }
+        },250)
+      },
+      methods: {
+       async caridata(key,uri,paginate){
+         
+         try {
+            this.loading=true;
+            
+            const resp = await fetch(paginate ? paginate : 
+            `https://cari-teks-video-api.vercel.app/api/search?q=${key}&url=${encodeURIComponent(uri)}`)
+            .then(_ =>( _.ok ? _.json() : []))
+            console.log(resp)
+            this.loading=false
+            this.hu =true
+            this.daftarHasil = resp.data
+            this.paginate.first=resp.first
+            this.paginate.last =resp.last
+            this.paginate.prev =resp.prev
+            this.paginate.next =resp.next
+            this.paginate.total=resp.total
+            this.paginate.page =resp.page
+         } catch (error) {
+         }
+       },
+       async navigasi(type) {
+            if (!this.paginate[type]) {
+              return
+            }
+            await this.caridata(this.kataKunci, this.uri, this.paginate[type])
+          },
+       clear(){
+        this.kataKunci = ''
+        this.clearpage()
+       },
+       clearpage() {
+            this.daftarHasil = []
+            this.paginate = {
+              first: null,
+              last: null,
+              prev: null,
+              next: null,
+              total: 0,
+              page: null
+            }
+          }
+      },
+    });
+  </script>
+</body>
+</html>
