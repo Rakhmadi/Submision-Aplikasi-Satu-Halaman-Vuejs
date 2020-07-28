@@ -29,11 +29,23 @@
           <v-row align="center" justify="center"> 
             <v-col cols="12"md="6">
               <h1 class="wh" v-text='text'></h1>
+              <br>
+              <v-text-field
+                  v-model='uri'
+                  :elevation="13"
+                  :append-icon="sh ? 'mdi-earth': 'mdi-earth'"
+                  label="Url Video"
+                  id="id"
+                  solo
+                  rounded
+                  clearable
+                  
+              ></v-text-field>
               <v-text-field
                   v-model='kataKunci'
                   :elevation="13"
                   :append-icon="sh ? 'mdi-magnify': 'mdi-magnify'"
-                  label="Search Video"
+                  label="Search "
                   id="id"
                   solo
                   rounded
@@ -87,7 +99,7 @@
           loading:false,
           sh:true,
           hu:false,
-          text:'Search Video',
+          text:'Find You Text Video',
           uri: 'https://www.youtube.com/watch?v=klnvttPfOUM',
           kataKunci: '',
           daftarHasil: [],
