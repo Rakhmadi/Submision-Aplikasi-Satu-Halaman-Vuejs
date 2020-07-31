@@ -8,17 +8,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
   <style>
    .grd{
-    background-color: #89d4cf;
-    background-image: linear-gradient(315deg, #89d4cf 0%, #6e45e1 74%);
+     background-color: #813cf1 ;
+    background-image: url(back.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
    }
    .wh{
      color: white;
    }
    .v-list {
-  height: 400px;
-  overflow-y: auto;
-}
-  
+    height: 400px;
+    overflow-y: auto;
+    }
+    .cvt-highlight{
+       background-color: #21D7A4 !important;
+       color: white;
+    }
+    
   </style>
 </head>
 <body>
@@ -27,7 +34,7 @@
       <v-main class="grd">
         <v-container class="fill-height" fluid >
           <v-row align="center" justify="center"> 
-            <v-col cols="12"md="6">
+            <v-col cols="12"md="7">
               <h1 class="wh" v-text='text'></h1>
               <br>
               <v-text-field
@@ -53,21 +60,21 @@
               ></v-text-field>
               <v-card v-show="hu" :loading="loading" transition="slide-y-reverse-transition">
                   <v-toolbar color="white" light>
-                    <v-btn color="primary" @click="navigasi('first')" :disabled="!paginate['first']" icon title="First" >
+                    <v-btn color="#21D7A4" @click="navigasi('first')" :disabled="!paginate['first']" icon title="First" >
                       <v-icon>mdi-page-first</v-icon>
                     </v-btn> 
-                    <v-btn color="primary" @click="navigasi('prev')" :disabled="!paginate['prev']" icon title="Pref">
+                    <v-btn color="#21D7A4" @click="navigasi('prev')" :disabled="!paginate['prev']" icon title="Pref">
                       <v-icon>mdi-chevron-left</v-icon>
                     </v-btn> 
-                    <v-btn color="primary" @click="navigasi('next')" :disabled="!paginate['next']" icon title="Next">
+                    <v-btn color="#21D7A4" @click="navigasi('next')" :disabled="!paginate['next']" icon title="Next">
                       <v-icon>mdi-chevron-right</v-icon>
                     </v-btn> 
-                    <v-btn color="primary" @click="navigasi('last')" :disabled="!paginate['last']" icon title="Last">
+                    <v-btn color="#21D7A4" @click="navigasi('last')" :disabled="!paginate['last']" icon title="Last">
                       <v-icon>mdi-page-last</v-icon>
                     </v-btn>
-                    <v-toolbar-title>Page {{paginate.page}} of {{paginate.total}}</v-toolbar-title>
+                    <v-toolbar-title>Page {{paginate.page}} Total {{paginate.total}}</v-toolbar-title>
                     <v-spacer></v-spacer>
-                    <v-btn color="primary"@click="clear()" icon>
+                    <v-btn color="#21D7A4"@click="clear()" icon>
                       <v-icon>mdi-delete</v-icon>
                     </v-btn>
                   </v-toolbar>
@@ -90,10 +97,14 @@
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
   <script src="pDeBounc.js"></script>
   <script>
-    {{}}
     new Vue({
       el: '#app',
-      vuetify: new Vuetify(),
+      vuetify: new Vuetify({
+        theme:{
+          er:'#21D7A4'
+        }
+      }),
+     
       data() {
         return {
           loading:false,
@@ -164,6 +175,7 @@
               next: null,
               total: 0,
               page: null
+              
             }
           }
       },
